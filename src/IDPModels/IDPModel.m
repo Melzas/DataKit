@@ -29,6 +29,33 @@
 }
 
 #pragma mark -
+#pragma mark Accessors
+
+- (void)setState:(IDPModelState)state {
+	_state = state;
+	switch (_state) {
+		case IDPModelFinished:
+			[self notifyObserversOfSuccessfulLoad];
+			break;
+			
+		case IDPModelFailed:
+			[self notifyObserversOfFailedLoad];
+			break;
+			
+		case IDPModelCancelled:
+			[self notifyObserversOfCancelledLoad];
+			break;
+			
+		case IDPModelUnloaded:
+			[self notifyObserversOfUnload];
+			break;
+			
+		default:
+			break;
+	}
+}
+
+#pragma mark -
 #pragma mark Public
 
 - (void)prepareForLoad {
@@ -59,13 +86,11 @@
 
 - (void)finishLoading {
     self.state = IDPModelFinished;
-    [self notifyObserversOfSuccessfulLoad];
 }
 
 - (void)failLoading {
     self.state = IDPModelFailed;
     [self cleanup];
-    [self notifyObserversOfFailedLoad];
 }
 
 - (void)cancel {
@@ -74,7 +99,6 @@
     }
     self.state = IDPModelCancelled;
     [self cleanup];
-    [self notifyObserversOfCancelledLoad];
 }
 
 - (void)dump {
@@ -83,8 +107,7 @@
     }
     
     self.state = IDPModelUnloaded;
-    [self cleanup];    
-    [self notifyObserversOfUnload];
+    [self cleanup];
 }
 
 - (void)cleanup {
