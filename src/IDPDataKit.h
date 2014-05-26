@@ -19,3 +19,4 @@
 #import "IDPURLRequest.h"
 #import "IDPWeakArray.h"
 #import "IDPSingletonModel.h"
+#import "IDPIndex.h"
