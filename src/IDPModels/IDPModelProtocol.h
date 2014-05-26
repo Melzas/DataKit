@@ -28,8 +28,17 @@ typedef enum {
 
 @property (nonatomic, readonly) IDPModelState   state;
 
+// should perform preparation steps before loading
+// default implementation does nothing
+// intended for subclassing
+- (void)prepareForLoad;
+
 // should load the model and inform observers of loading state
-// is intended for subclassing
+// default implementation does nothing
+// intended for subclassing
+- (void)performLoading;
+
+// loads the model using prepareForLoad and performLodaing methods
 // if the model is loaded already, notifies observers upon calling the method
 // returns YES, if the state != IDPModelLoading
 - (BOOL)load;

@@ -31,16 +31,30 @@
 #pragma mark -
 #pragma mark Public
 
+- (void)prepareForLoad {
+	
+}
+
+- (void)performLoading {
+	
+}
+
 - (BOOL)load {
     if (IDPModelFinished == self.state) {
         [self notifyObserversOfSuccessfulLoad];
         return NO;
     }
-
-    BOOL result = IDPModelLoading != self.state;
+	
+	if (IDPModelLoading == self.state) {
+		return NO;
+	}
+	
+	[self prepareForLoad];
+	
     self.state = IDPModelLoading;
+	[self performLoading];
     
-    return result;
+    return YES;
 }
 
 - (void)finishLoading {
