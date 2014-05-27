@@ -20,3 +20,4 @@
 #import "IDPWeakArray.h"
 #import "IDPSingletonModel.h"
 #import "IDPIndex.h"
+#import "IDPIndices.h"
