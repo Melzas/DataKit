@@ -46,6 +46,10 @@
 			[self notifyObserversOfCancelledLoad];
 			break;
 			
+		case IDPModelChanged:
+			[self notifyObserversOfChanges];
+			break;
+			
 		case IDPModelUnloaded:
 			[self notifyObserversOfUnload];
 			break;
@@ -99,6 +103,10 @@
     }
     self.state = IDPModelCancelled;
     [self cleanup];
+}
+
+- (void)finishChanging {
+	self.state = IDPModelChanged;
 }
 
 - (void)dump {

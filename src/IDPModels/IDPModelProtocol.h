@@ -17,6 +17,7 @@ typedef enum {
     IDPModelFinished,
     IDPModelFailed,
     IDPModelCancelled,
+	IDPModelChanged,
     IDPModelUnloaded
 } IDPModelState;
 
@@ -27,6 +28,10 @@ typedef enum {
 @property (nonatomic, readonly) NSArray         *observers;
 
 @property (nonatomic, readonly) IDPModelState   state;
+
+- (void)addObserver:(id)observer;
+- (void)removeObserver:(id)observer;
+- (BOOL)isObjectAnObserver:(id)observer;
 
 // should perform preparation steps before loading
 // default implementation does nothing
@@ -63,6 +68,10 @@ typedef enum {
 // and informs observers of loading failure
 // Does nothing otherwise
 - (void)cancel;
+
+// default implementation sets the corresponding state
+// and informs obsevers of changes
+- (void)finishChanging;
 
 // method itnended for subclassing
 // should unload the models and inform the delegate of state
