@@ -45,11 +45,7 @@
 		case IDPModelCancelled:
 			[self notifyObserversOfCancelledLoad];
 			break;
-			
-		case IDPModelChanged:
-			[self notifyObserversOfChanges];
-			break;
-			
+						
 		case IDPModelUnloaded:
 			[self notifyObserversOfUnload];
 			break;
@@ -106,7 +102,11 @@
 }
 
 - (void)finishChanging {
-	self.state = IDPModelChanged;
+	[self notifyObserversOfChanges];
+}
+
+- (void)finishChangingWithMessaage:(NSDictionary *)message {
+	[self notifyObserversOfChangesWithMessage:message];
 }
 
 - (void)dump {

@@ -17,7 +17,6 @@ typedef enum {
     IDPModelFinished,
     IDPModelFailed,
     IDPModelCancelled,
-	IDPModelChanged,
     IDPModelUnloaded
 } IDPModelState;
 
@@ -72,6 +71,10 @@ typedef enum {
 // default implementation sets the corresponding state
 // and informs obsevers of changes
 - (void)finishChanging;
+
+// default implementation sets the corresponding state
+// and informs obsevers of changes
+- (void)finishChangingWithMessaage:(NSDictionary *)message;
 
 // method itnended for subclassing
 // should unload the models and inform the delegate of state
