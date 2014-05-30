@@ -40,6 +40,14 @@
 	return self;
 }
 
+- (id)init {
+	return [self initWithLowerLimit:[IDPIndex indexWithValue:0]
+						 upperLimit:[IDPIndex indexWithValue:0]];
+}
+
+#pragma mark -
+#pragma mark Public
+
 - (IDPIndex *)indexBeforeIndex:(IDPIndex *)index {
 	NSInteger indexValue = index.value;
 	
