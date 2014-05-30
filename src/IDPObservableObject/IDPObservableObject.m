@@ -9,6 +9,9 @@
 #import "IDPObservableObject.h"
 
 #import "NSArray+IDPExtensions.h"
+#import "NSObject+IDPExtensions.h"
+
+#import "IDPObject.h"
 
 @interface IDPObservableObject ()
 @property (nonatomic, retain)	NSMutableArray	*mutableObservers;
@@ -83,15 +86,15 @@
 - (void)notifyObserversWithSelector:(SEL)selector userInfo:(id)info {
     for (id<NSObject> observer in self.observers) {
         if ([observer respondsToSelector:selector]) {
-            [observer performSelector:selector withObject:info];
+            [observer performSelector:selector withObject:self.target withObject:info];
         }
     }
 }
 
 - (void)notifyObserversWithSelector:(SEL)selector userInfo:(id)info error:(id)error {
-    for (id<NSObject> observer in self.observers) {
+    for (id<IDPObject> observer in self.observers) {
         if ([observer respondsToSelector:selector]) {
-            [observer performSelector:selector withObject:info withObject:error];
+            [observer performSelector:selector withObjects:self.target, info, error, nil];
         }
     }
 }
