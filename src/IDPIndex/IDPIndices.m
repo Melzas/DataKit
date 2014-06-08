@@ -16,7 +16,7 @@
 #pragma mark Class Methods
 
 + (id)indicesWithLowerLimit:(IDPIndex *)lowerLimit upperLimit:(IDPIndex *)upperLimit {
-	return [[self alloc] initWithLowerLimit:lowerLimit upperLimit:upperLimit];
+	return [[[self alloc] initWithLowerLimit:lowerLimit upperLimit:upperLimit] autorelease];
 }
 
 #pragma mark -
