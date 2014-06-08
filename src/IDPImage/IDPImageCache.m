@@ -7,7 +7,7 @@
 static IDPImageCache *IDPSharedImageCache = nil;
 
 @interface IDPImageCache ()
-@property (nonatomic, retain)	NSMutableDictionary	*imageCache;
+@property (nonatomic, retain)	IDPWeakMutableDictionary	*imageCache;
 
 @end
 
@@ -30,10 +30,6 @@ static IDPImageCache *IDPSharedImageCache = nil;
 #pragma mark Initializatins and Deallocations
 
 - (void)dealloc {
-	for (IDPImageModel *imageModel in self.imageCache) {
-		imageModel.cache = nil;
-	}
-	
 	self.imageCache = nil;
 	
 	[super dealloc];
@@ -42,7 +38,7 @@ static IDPImageCache *IDPSharedImageCache = nil;
 - (id)init {
 	self = [super init];
 	if (self) {
-		self.imageCache = [NSMutableDictionary object];
+		self.imageCache = [IDPWeakMutableDictionary object];
 	}
 	
 	return  self;
@@ -69,6 +65,7 @@ static IDPImageCache *IDPSharedImageCache = nil;
 
 - (IDPImageModel *)cachedImageForPath:(NSString *)imagePath {
 	IDPImageModel *imageModel = nil;
+	
 	@synchronized(self) {
 		imageModel = [self.imageCache objectForKey:imagePath];
 	}

@@ -30,9 +30,13 @@ static NSString * const kFFCacheFolder	= @"Caches";
 #pragma mark Initializations and Deallocations
 
 - (void)cleanup {
-	self.imageData = nil;
 	self.path = nil;
+	
+	[self.cache removeImage:self];
+	self.cache = nil;
+	
 	self.connection = nil;
+	self.imageData = nil;
 }
 
 - (id)initWithPath:(NSString *)path {
@@ -47,6 +51,7 @@ static NSString * const kFFCacheFolder	= @"Caches";
     self = [super init];
     if (self) {
 		self.path = path;
+		
 		[cache addImage:self];
     }
 	
@@ -93,16 +98,6 @@ static NSString * const kFFCacheFolder	= @"Caches";
 	self.connection = nil;
 	
 	[super cancel];
-}
-
-- (oneway void)release {
-    @synchronized (self) {
-		[super release];
-		
-        if (1 == [self retainCount]) {
-            [self.cache removeImage:self];
-        }
-    }
 }
 
 #pragma mark -

@@ -11,7 +11,7 @@
 @interface IDPImageModel : IDPModel
 @property (nonatomic, readonly)	NSString		*path;
 @property (nonatomic, readonly)	UIImage			*image;
-@property (nonatomic, assign)	IDPImageCache	*cache;
+@property (nonatomic, retain)	IDPImageCache	*cache;
 
 + (id)modelWithPath:(NSString *)path;
 - (id)initWithPath:(NSString *)path;

@@ -20,6 +20,7 @@
 #import "IDPURLConnection.h"
 #import "IDPURLRequest.h"
 #import "IDPWeakArray.h"
+#import "IDPWeakDictionary.h"
 #import "IDPSingletonModel.h"
 #import "IDPIndex.h"
 #import "IDPIndices.h"
