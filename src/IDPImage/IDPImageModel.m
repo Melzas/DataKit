@@ -30,10 +30,9 @@ static NSString * const kFFCacheFolder	= @"Caches";
 #pragma mark Initializations and Deallocations
 
 - (void)cleanup {
-	self.path = nil;
-	
 	[self.cache removeImage:self];
 	self.cache = nil;
+	self.path = nil;
 	
 	self.connection = nil;
 	self.imageData = nil;
