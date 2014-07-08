@@ -101,14 +101,6 @@
     [self cleanup];
 }
 
-- (void)finishChanging {
-	[self notifyObserversOfChanges];
-}
-
-- (void)finishChangingWithMessaage:(NSDictionary *)message {
-	[self notifyObserversOfChangesWithMessage:message];
-}
-
 - (void)dump {
     if (IDPModelUnloaded == self.state) {
         return;

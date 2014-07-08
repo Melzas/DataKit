@@ -68,14 +68,6 @@ typedef enum {
 // Does nothing otherwise
 - (void)cancel;
 
-// default implementation sets the corresponding state
-// and informs obsevers of changes
-- (void)finishChanging;
-
-// default implementation sets the corresponding state
-// and informs obsevers of changes
-- (void)finishChangingWithMessaage:(NSDictionary *)message;
-
 // method itnended for subclassing
 // should unload the models and inform the delegate of state
 // sets loaded to NO and informs observers of unload
@@ -86,5 +78,12 @@ typedef enum {
 // is called in dealloc, failLoading, dump and cancel
 // default implementation does nothing
 - (void)cleanup;
+
+- (void)notifyObserversOfSuccessfulLoad;
+- (void)notifyObserversOfFailedLoad;
+- (void)notifyObserversOfCancelledLoad;
+- (void)notifyObserversOfChanges;
+- (void)notifyObserversOfChangesWithMessage:(NSDictionary *)message;
+- (void)notifyObserversOfUnload;
 
 @end
