@@ -8,15 +8,24 @@
 
 @class IDPImageCache;
 
+typedef enum {
+	kIDPImageSourceFile,
+	kIDPImageSourceURL,
+	kIDPImageSourceFileURL,
+	kIDPImageSourceURLFile,
+	kIDPImageSourceFileURLUpdate
+} IDPImageSource;
+
 @interface IDPImageModel : IDPModel
 @property (nonatomic, readonly)	NSString		*path;
 @property (nonatomic, readonly)	UIImage			*image;
+@property (nonatomic, assign)	IDPImageSource	imageSource;
 @property (nonatomic, retain)	IDPImageCache	*cache;
 
 + (id)modelWithPath:(NSString *)path;
 - (id)initWithPath:(NSString *)path;
 
+- (void)loadFromSource:(IDPImageSource)source;
 - (void)save;
-- (void)loadFromFile;
 
 @end

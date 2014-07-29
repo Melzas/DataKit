@@ -2,15 +2,17 @@
 
 #import "IDPImageCache.h"
 
-static NSString * const kFFCacheFolder	= @"Caches";
+static NSString * const kIDPCacheFolder	= @"Caches";
 
 @interface IDPImageModel () <IDPModelObserver>
-@property (nonatomic, copy)		NSString	*path;
-@property (nonatomic, retain)	UIImage		*image;
-
+@property (nonatomic, copy)		NSString			*path;
 @property (nonatomic, retain)	IDPURLConnection	*connection;
+
 @property (nonatomic, retain)	NSData				*imageData;
 @property (nonatomic, readonly)	NSString			*savePath;
+
+- (void)loadFromFile;
+- (void)loadFromURL;
 
 @end
 
@@ -29,16 +31,16 @@ static NSString * const kFFCacheFolder	= @"Caches";
 #pragma mark -
 #pragma mark Initializations and Deallocations
 
-- (void)cleanup {
-	[self.cache removeImage:self];
-	self.cache = nil;
+- (void)dealloc {
+	[self cleanup];
 	self.path = nil;
 	
-	self.connection = nil;
-	self.imageData = nil;
+	[super dealloc];
 }
 
 - (id)initWithPath:(NSString *)path {
+	self.imageSource = kIDPImageSourceFileURLUpdate;
+	
 	IDPImageCache *cache = [IDPImageCache sharedObject];
 	IDPImageModel *imageModel = [cache cachedImageForPath:path];
 	
@@ -48,9 +50,9 @@ static NSString * const kFFCacheFolder	= @"Caches";
 	}
 	
     self = [super init];
+	
     if (self) {
 		self.path = path;
-		
 		[cache addImage:self];
     }
 	
@@ -70,7 +72,7 @@ static NSString * const kFFCacheFolder	= @"Caches";
 
 - (NSString *)savePath {
 	NSString *libraryPath = [NSFileManager libraryDirectoryPath];
-	NSString *cachePath = [libraryPath stringByAppendingPathComponent:kFFCacheFolder];
+	NSString *cachePath = [libraryPath stringByAppendingPathComponent:kIDPCacheFolder];
 	NSString *imageName = [self.path lastPathComponent];
 	
 	return [cachePath stringByAppendingPathComponent:imageName];
@@ -79,18 +81,14 @@ static NSString * const kFFCacheFolder	= @"Caches";
 #pragma mark -
 #pragma mark Public
 
-- (void)save {
-	[self.imageData writeToFile:self.savePath atomically:YES];
+- (void)loadFromSource:(IDPImageSource)source {
+	self.imageSource = source;
+	
+	[self load];
 }
 
-- (void)loadFromFile {
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		if (nil == self.imageData) {
-			self.imageData = [NSData dataWithContentsOfFile:self.savePath];
-		}
-		
-		nil == self.imageData ? [self failLoading] : [self finishLoading];
-	});
+- (void)save {
+	[self.imageData writeToFile:self.savePath atomically:YES];
 }
 
 - (void)cancel {
@@ -99,18 +97,82 @@ static NSString * const kFFCacheFolder	= @"Caches";
 	[super cancel];
 }
 
+- (void)dump {
+	[self save];
+	
+	[super dump];
+}
+
+- (void)cleanup {
+	[self.cache removeImage:self];
+	self.cache = nil;
+	
+	self.connection = nil;
+	self.imageData = nil;
+}
+
 #pragma mark -
 #pragma mark Private
 
-- (void)performLoading {
-	if (nil != self.imageData) {
-		[self finishLoading];
-		return;
-	}
-	
+- (void)loadFromFile {
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		self.imageData = [NSData dataWithContentsOfFile:self.savePath];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self finishLoading];
+		});
+	});
+}
+
+- (void)loadFromURL {
 	NSURL *imageUrl = [NSURL URLWithString:self.path];
 	self.connection = [IDPURLConnection connectionToURL:imageUrl];
 	[self.connection load];
+}
+
+- (void)performLoading {
+	IDPImageSource imageSource = self.imageSource;
+	
+	switch (imageSource) {
+		case kIDPImageSourceFile:
+		case kIDPImageSourceFileURL:
+		case kIDPImageSourceFileURLUpdate:
+			[self loadFromFile];
+			break;
+			
+		case kIDPImageSourceURL:
+		case kIDPImageSourceURLFile:
+			[self loadFromURL];
+			break;
+	}
+}
+
+- (void)finishLoading {
+	IDPImageSource imageSource = self.imageSource;
+	
+	switch (imageSource) {
+		case kIDPImageSourceFile:
+		case kIDPImageSourceURL:
+			(nil == self.imageData) ? [self failLoading] : [super finishLoading];
+			break;
+			
+		case kIDPImageSourceFileURL:
+			(nil == self.imageData) ? [self loadFromURL] : [super finishLoading];
+			break;
+			
+		case kIDPImageSourceURLFile:
+			(nil == self.imageData) ? [self loadFromFile] : [super finishLoading];
+			break;
+			
+		case kIDPImageSourceFileURLUpdate:
+			self.imageSource = kIDPImageSourceURL;
+			[self loadFromURL];
+			
+			if (nil != self.imageData) {
+				[super finishLoading];
+			}
+			break;
+	}
 }
 
 #pragma mark -
@@ -125,7 +187,7 @@ static NSString * const kFFCacheFolder	= @"Caches";
 }
 
 - (void)modelDidFailToLoad:(id)model {
-	[self loadFromFile];
+	[self failLoading];
 	
 	self.connection = nil;
 }
