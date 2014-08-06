@@ -8,7 +8,7 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 @property (nonatomic, copy)		NSString			*path;
 @property (nonatomic, retain)	IDPURLConnection	*connection;
 
-@property (nonatomic, retain)	NSData				*imageData;
+@property (atomic, retain)		NSData				*imageData;
 @property (nonatomic, readonly)	NSString			*savePath;
 
 - (void)loadFromFile;
@@ -39,7 +39,7 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 }
 
 - (id)initWithPath:(NSString *)path {
-	self.imageSource = kIDPImageSourceFileURLUpdate;
+	self.imageSource = kIDPImageSourceFileURL;
 	
 	IDPImageCache *cache = [IDPImageCache sharedObject];
 	IDPImageModel *imageModel = [cache cachedImageForPath:path];
