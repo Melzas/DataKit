@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Anton Rayev. All rights reserved.
 //
 
+#import "IDPImageModel.h"
+
+#import "IDPModel.h"
+
 @class IDPImageCache;
 
 typedef enum {

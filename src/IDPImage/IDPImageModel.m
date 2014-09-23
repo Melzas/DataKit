@@ -1,6 +1,10 @@
 #import "IDPImageModel.h"
 
+#import "NSFileManager+IDPExtensions.h"
+#import "IDPPropertyMacros.h"
+
 #import "IDPImageCache.h"
+#import "IDPURLConnection.h"
 
 static NSString * const kIDPCacheFolder	= @"Caches";
 

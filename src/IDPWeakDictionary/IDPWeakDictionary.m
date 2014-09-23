@@ -8,6 +8,8 @@
 
 #import "IDPWeakDictionary.h"
 
+#import "NSArray+IDPExtensions.h"
+
 #import "IDPWeakArray.h"
 
 @implementation IDPWeakMutableDictionary

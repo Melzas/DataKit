@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-// dictionary with weak keys and values
+#import "IDPMutableDictionary.h"
 
+// dictionary with weak keys and values
 @interface IDPWeakMutableDictionary : IDPMutableDictionary
 
 @end

@@ -2,6 +2,7 @@
 
 #import "NSObject+IDPExtensions.h"
 
+#import "IDPWeakDictionary.h"
 #import "IDPImageModel.h"
 
 static IDPImageCache *IDPSharedImageCache = nil;
