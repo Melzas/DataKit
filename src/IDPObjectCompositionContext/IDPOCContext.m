@@ -37,7 +37,7 @@ static id IDPForwardingTargetForSelectorMixinMethod(id _self, SEL __cmd, SEL aSe
     
     IMP originalImplementation = implementation.forwardingInvocationForSelectorIMP;
 
-    return originalImplementation(_self, __cmd, aSelector);
+    return ((id (*)(id, SEL, SEL))(originalImplementation))(_self, __cmd, aSelector);
 }
 
 static BOOL IDPRespondsToSelectorMixinMethod(id _self, SEL __cmd, SEL aSelector) {
@@ -61,7 +61,7 @@ static BOOL IDPRespondsToSelectorMixinMethod(id _self, SEL __cmd, SEL aSelector)
     
     IMP originalImplementation = implementation.respondsToSelectorIMP;
     
-    return (BOOL)originalImplementation(_self, __cmd, aSelector);
+    return ((BOOL (*)(id, SEL, SEL))(originalImplementation))(_self, __cmd, aSelector);
 }
 
 @interface IDPOCContext ()
@@ -161,15 +161,12 @@ static BOOL IDPRespondsToSelectorMixinMethod(id _self, SEL __cmd, SEL aSelector)
               forSelector:(SEL)selector
                   inClass:(Class)theClass
 {
-    IMP previousIMP = [theClass instanceMethodForSelector:selector];
-    
-    Method method = class_getInstanceMethod(theClass, selector);
-    class_replaceMethod(theClass,
-                        selector,
-                        implementation,
-                        method_getTypeEncoding(method));
-    
-    return previousIMP;
+	Method method = class_getInstanceMethod(theClass, selector);
+	
+	return class_replaceMethod(theClass,
+							   selector,
+							   implementation,
+							   method_getTypeEncoding(method));
 }
 
 @end
