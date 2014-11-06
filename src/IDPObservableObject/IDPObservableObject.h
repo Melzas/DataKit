@@ -20,6 +20,7 @@
 // when you no longer need to observe the object
 - (void)addObserver:(id)observer;
 - (void)removeObserver:(id)observer;
+- (void)insertObserver:(id)observer atIndex:(NSUInteger)index;
 - (BOOL)isObjectAnObserver:(id)observer;
 
 // These methods should only be called in child classes.

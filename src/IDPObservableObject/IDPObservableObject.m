@@ -68,6 +68,10 @@
     [self.mutableObservers removeObject:observer];
 }
 
+- (void)insertObserver:(id)observer atIndex:(NSUInteger)index {
+	[self.mutableObservers insertObject:observer atIndex:index];
+}
+
 - (BOOL)isObjectAnObserver:(id)observer {
     return [self.mutableObservers containsObject:observer];
 }
