@@ -68,7 +68,7 @@
 
 - (BOOL)load {
     if (IDPModelFinished == self.state) {
-        [self notifyObserversOfSuccessfulLoad];
+        [self finishLoading];
         return NO;
     }
 	

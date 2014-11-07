@@ -63,6 +63,15 @@ static NSString * const kIDPCacheFolder	= @"Caches";
     return self;
 }
 
+- (id)copy {
+	IDPImageModel *model = [[self class] new];
+	model.path = self.path;
+	model.imageData = [[self.imageData copy] autorelease];
+	model.imageSource = self.imageSource;
+	
+	return model;
+}
+
 #pragma mark -
 #pragma mark - Accessors
 
