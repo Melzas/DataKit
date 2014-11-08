@@ -43,33 +43,24 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 }
 
 - (id)initWithPath:(NSString *)path {
-	self.imageSource = kIDPImageSourceFileURL;
-	
-	IDPImageCache *cache = [IDPImageCache sharedObject];
-	IDPImageModel *imageModel = [cache cachedImageForPath:path];
-	
-	if (nil != imageModel) {
-		[self autorelease];
-		return [imageModel retain];
-	}
-	
     self = [super init];
 	
     if (self) {
+		self.imageSource = kIDPImageSourceFileURL;
+		
+		IDPImageCache *cache = [IDPImageCache sharedObject];
+		UIImage *image = [cache cachedImageForPath:path];
+		
+		if (nil != image) {
+			self.imageData = UIImagePNGRepresentation(image);
+			[self finishLoading];
+		}
+		
 		self.path = path;
 		[cache addImage:self];
     }
 	
     return self;
-}
-
-- (id)copy {
-	IDPImageModel *model = [[self class] new];
-	model.path = self.path;
-	model.imageData = [[self.imageData copy] autorelease];
-	model.imageSource = self.imageSource;
-	
-	return model;
 }
 
 #pragma mark -

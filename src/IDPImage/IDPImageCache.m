@@ -64,14 +64,14 @@ static IDPImageCache *IDPSharedImageCache = nil;
 	}
 }
 
-- (IDPImageModel *)cachedImageForPath:(NSString *)imagePath {
+- (UIImage *)cachedImageForPath:(NSString *)imagePath {
 	IDPImageModel *imageModel = nil;
 	
 	@synchronized(self) {
 		imageModel = [self.imageCache objectForKey:imagePath];
 	}
 	
-	return imageModel;
+	return imageModel.image;
 }
 
 #pragma mark -

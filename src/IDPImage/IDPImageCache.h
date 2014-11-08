@@ -16,6 +16,6 @@
 - (void)removeImage:(IDPImageModel *)imageModel;
 
 // returns nil if image not in the cache
-- (IDPImageModel *)cachedImageForPath:(NSString *)imagePath;
+- (UIImage *)cachedImageForPath:(NSString *)imagePath;
 
 @end
