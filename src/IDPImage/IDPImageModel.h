@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Anton Rayev. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 #import "IDPImageModel.h"
 
 #import "IDPModel.h"

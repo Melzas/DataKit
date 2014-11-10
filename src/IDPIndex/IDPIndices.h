@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Anton Rayev. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @class IDPIndex;
 
 @interface IDPIndices : NSObject
