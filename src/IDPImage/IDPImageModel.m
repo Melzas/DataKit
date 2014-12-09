@@ -32,6 +32,10 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 	return [[[self alloc] initWithPath:path] autorelease];
 }
 
++ (id)modelWithPath:(NSString *)path data:(NSData *)data {
+	return [[[self alloc] initWithPath:path data:data] autorelease];
+}
+
 #pragma mark -
 #pragma mark Initializations and Deallocations
 
@@ -43,9 +47,9 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 }
 
 - (id)initWithPath:(NSString *)path {
-    self = [super init];
+	self = [super init];
 	
-    if (self) {
+	if (self) {
 		self.imageSource = kIDPImageSourceFileURL;
 		
 		IDPImageCache *cache = [IDPImageCache sharedObject];
@@ -58,9 +62,37 @@ static NSString * const kIDPCacheFolder	= @"Caches";
 		
 		self.path = path;
 		[cache addImage:self];
-    }
+	}
 	
-    return self;
+	return self;
+}
+
+- (id)initWithPath:(NSString *)path data:(NSData *)data {
+	self = [super init];
+	
+	if (self) {
+		self.imageSource = kIDPImageSourceFile;
+		
+		IDPImageCache *cache = [IDPImageCache sharedObject];
+		UIImage *image = [cache cachedImageForPath:path];
+		
+		if (nil != image) {
+			self.imageData = UIImagePNGRepresentation(image);
+			[self finishLoading];
+		}
+		
+		if (nil != data) {
+			self.imageData = data;
+			[self finishLoading];
+		} else {
+			[self failLoading];
+		}
+		
+		self.path = path;
+		[cache addImage:self];
+	}
+	
+	return self;
 }
 
 #pragma mark -

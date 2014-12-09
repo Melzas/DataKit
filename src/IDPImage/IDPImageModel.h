@@ -29,7 +29,10 @@ typedef enum {
 @property (nonatomic, retain)	IDPImageCache	*cache;
 
 + (id)modelWithPath:(NSString *)path;
++ (id)modelWithPath:(NSString *)path data:(NSData *)data;
+
 - (id)initWithPath:(NSString *)path;
+- (id)initWithPath:(NSString *)path data:(NSData *)data;
 
 - (void)loadFromSource:(IDPImageSource)source;
 - (void)save;
