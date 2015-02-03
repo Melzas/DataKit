@@ -50,9 +50,10 @@ static IDPImageCache *IDPSharedImageCache = nil;
 
 - (void)addImage:(IDPImageModel *)imageModel {
 	@synchronized(self) {
-		[self.imageCache setObject:imageModel forKey:imageModel.path];
-		
-		imageModel.cache = self;
+		if (nil != imageModel.path && ![imageModel.path isEqualToString:@""]) {
+			[self.imageCache setObject:imageModel forKey:imageModel.path];
+			imageModel.cache = self;
+		}
 	}
 }
 
